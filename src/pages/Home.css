@@ -1,0 +1,14 @@
+.hero-section {
+  background: url("https://images.unsplash.com/photo-1523275335684-37898b6baf30")
+    no-repeat center center/cover;
+  height: 80vh;
+}
+
+.product-card {
+  transition: all 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}

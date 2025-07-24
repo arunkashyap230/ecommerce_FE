@@ -34,7 +34,14 @@ const Login = () => {
         const data = await res.json();
 
         if (res.ok) {
-          login(data.user || data.customer, data.token); // Call context login
+          const rawUser = data.user || data.customer;
+          const normalizedUser = {
+            name: rawUser.name || rawUser.fullName,
+            email: rawUser.email,
+            role: rawUser.role,
+          };
+
+          login(normalizedUser, data.token); // Call context login with consistent format
           navigate("/");
           return;
         }

@@ -31,19 +31,51 @@ const NavigationBar = () => {
 
   return (
     <>
-      <Navbar bg="light" variant="light" className="shadow-sm py-3 sticky-top">
-        <Container>
-          <Navbar.Brand as={Link} to="/" className="fw-bold fs-4 d-flex gap-2">
+      <Navbar
+        bg="light"
+        variant="light"
+        expand="lg"
+        className="shadow-sm py-3 sticky-top"
+      >
+        <Container className="d-flex justify-content-between align-items-center">
+          {/* Brand */}
+          <Navbar.Brand
+            as={Link}
+            to="/"
+            className="fw-bold fs-4 d-flex align-items-center gap-2"
+          >
             🛒 E-Shop
           </Navbar.Brand>
 
-          {/* Toggle Button */}
-          <Button variant="light" onClick={handleShow} className="d-lg-none">
-            <FaBars />
-          </Button>
+          {/* Right-side icons (Mobile View) */}
+          <div className="d-lg-none d-flex align-items-center gap-3">
+            {user && (
+              <span
+                className="fw-semibold text-muted"
+                style={{ fontSize: "0.9rem" }}
+              >
+                👋 {user.name}
+              </span>
+            )}
+            <Link to="/cart" className="position-relative text-dark">
+              <FaShoppingCart size={20} />
+              {cart.length > 0 && (
+                <Badge
+                  bg="danger"
+                  pill
+                  className="position-absolute top-0 start-100 translate-middle"
+                >
+                  {cart.length}
+                </Badge>
+              )}
+            </Link>
+            <Button variant="light" onClick={handleShow}>
+              <FaBars />
+            </Button>
+          </div>
 
           {/* Desktop View */}
-          <Nav className="ms-auto d-none d-lg-flex align-items-center gap-3">
+          <Nav className="ms-auto d-none d-lg-flex align-items-center gap-4">
             <Nav.Link
               as={Link}
               to="/"
@@ -94,13 +126,15 @@ const NavigationBar = () => {
               className="position-relative d-flex align-items-center gap-1"
             >
               <FaShoppingCart /> Cart
-              <Badge
-                bg="danger"
-                pill
-                className="position-absolute top-0 start-100 translate-middle"
-              >
-                {cart.length}
-              </Badge>
+              {cart.length > 0 && (
+                <Badge
+                  bg="danger"
+                  pill
+                  className="position-absolute top-0 start-100 translate-middle"
+                >
+                  {cart.length}
+                </Badge>
+              )}
             </Nav.Link>
           </Nav>
         </Container>

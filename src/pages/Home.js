@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useCart } from "../context/CartContext";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import "./Home.css"; // custom styles
 
 const Home = () => {
@@ -8,6 +10,7 @@ const Home = () => {
   const { cart, addToCart, removeFromCart } = useCart();
 
   useEffect(() => {
+    AOS.init({ duration: 1000 });
     fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products`)
       .then((res) => res.json())
       .then((data) => setProducts(data))
@@ -19,28 +22,47 @@ const Home = () => {
   return (
     <>
       {/* Hero Section */}
-      <div className="hero-section text-center text-white d-flex align-items-center justify-content-center">
+      <div className="hero-section d-flex align-items-center justify-content-center text-white text-center">
         <div>
-          <h1 className="display-4 fw-bold">Shop the Latest Trends</h1>
-          <p className="lead">
-            Explore top products, hand-picked just for you.
+          <h1 className="display-3 fw-bold" data-aos="fade-up">
+            Your Style, Delivered
+          </h1>
+          <p className="lead mb-4" data-aos="fade-up" data-aos-delay="200">
+            Discover trending products curated just for you.
           </p>
-          <a href="#products" className="btn btn-light px-4 py-2 mt-3">
-            Browse Products
+          <a
+            href="#products"
+            className="btn btn-light btn-lg px-4 py-2"
+            data-aos="zoom-in"
+            data-aos-delay="400"
+          >
+            Shop Now
           </a>
         </div>
       </div>
 
       {/* Categories Section */}
-      <section className="py-5 bg-light">
+      <section className="py-5 bg-light" id="categories">
         <div className="container text-center">
-          <h2 className="mb-4 fw-bold">Shop by Category</h2>
-          <div className="row g-4">
-            {["Electronics", "Fashion", "Home", "Toys"].map((cat, i) => (
-              <div className="col-6 col-md-3" key={i}>
-                <div className="bg-white shadow-sm rounded py-4 px-3">
-                  <h5 className="text-primary">{cat}</h5>
-                  <p className="text-muted small">Explore {cat}</p>
+          <h2 className="fw-bold mb-4" data-aos="fade-up">
+            Shop by Category
+          </h2>
+          <div className="row g-4 justify-content-center">
+            {[
+              { name: "Electronics", icon: "💻" },
+              { name: "Fashion", icon: "👗" },
+              { name: "Home", icon: "🏠" },
+              { name: "Toys", icon: "🧸" },
+            ].map((cat, i) => (
+              <div
+                className="col-6 col-md-3"
+                key={i}
+                data-aos="fade-up"
+                data-aos-delay={i * 100}
+              >
+                <div className="category-card py-4 shadow-sm">
+                  <div className="display-5">{cat.icon}</div>
+                  <h5 className="mt-2 fw-semibold">{cat.name}</h5>
                 </div>
               </div>
             ))}
@@ -48,13 +70,31 @@ const Home = () => {
         </div>
       </section>
 
+      {/* CTA Section */}
+      <section className="py-5 bg-dark text-white text-center">
+        <div className="container" data-aos="zoom-in">
+          <h3 className="fw-bold">Limited Time Deals!</h3>
+          <p>Hurry up and grab exclusive discounts before they expire.</p>
+          <a href="#products" className="btn btn-warning btn-lg">
+            Explore Offers
+          </a>
+        </div>
+      </section>
+
       {/* Products Section */}
       <div className="container py-5" id="products">
-        <h2 className="text-center mb-5 fw-bold">Featured Products</h2>
+        <h2 className="text-center fw-bold mb-5" data-aos="fade-up">
+          Featured Products
+        </h2>
         <div className="row g-4">
-          {products.map((product) => (
-            <div className="col-sm-6 col-md-4 col-lg-3" key={product._id}>
-              <div className="card h-100 shadow-sm border-0 product-card">
+          {products.map((product, index) => (
+            <div
+              className="col-sm-6 col-md-4 col-lg-3"
+              key={product._id}
+              data-aos="fade-up"
+              data-aos-delay={index * 100}
+            >
+              <div className="card h-100 border-0 shadow-sm product-card">
                 <img
                   src={product.imageUrl}
                   className="card-img-top"
@@ -70,7 +110,7 @@ const Home = () => {
                     {product.description}
                   </p>
                   <div className="mt-auto">
-                    <h6 className="text-primary fw-bold mb-2">
+                    <h6 className="fw-bold text-primary mb-2">
                       ₹{product.price}
                     </h6>
                     {isInCart(product._id) ? (

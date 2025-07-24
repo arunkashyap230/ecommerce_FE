@@ -1,6 +1,6 @@
 // src/pages/ProductForm.js
 import React, { useState } from "react";
-import { Form, Button, Container } from "react-bootstrap";
+import { Form, Button, Container, Card } from "react-bootstrap";
 
 const ProductForm = () => {
   const [form, setForm] = useState({
@@ -37,10 +37,10 @@ const ProductForm = () => {
 
       const data = await res.json();
       if (res.ok) {
-        alert("Product added successfully!");
+        alert("✅ Product added successfully!");
         console.log(data);
       } else {
-        alert(data.message || "Failed to add product");
+        alert(data.message || "❌ Failed to add product");
       }
     } catch (err) {
       console.error("Error uploading product:", err);
@@ -48,55 +48,73 @@ const ProductForm = () => {
   };
 
   return (
-    <Container className="mt-5" style={{ maxWidth: "600px" }}>
-      <h2 className="mb-4">Add Product</h2>
-      <Form onSubmit={handleSubmit} encType="multipart/form-data">
-        <Form.Group className="mb-3">
-          <Form.Label>Product Name</Form.Label>
-          <Form.Control
-            type="text"
-            name="name"
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
+    <Container className="mt-5 d-flex justify-content-center">
+      <Card
+        className="p-4 shadow-lg"
+        style={{ width: "100%", maxWidth: "600px", borderRadius: "16px" }}
+      >
+        <h3 className="text-center mb-4 fw-bold text-primary">
+          Add New Product
+        </h3>
+        <Form onSubmit={handleSubmit} encType="multipart/form-data">
+          <Form.Group className="mb-3">
+            <Form.Label className="fw-semibold">Product Name</Form.Label>
+            <Form.Control
+              type="text"
+              name="name"
+              onChange={handleChange}
+              placeholder="Enter product name"
+              className="rounded-3"
+              required
+            />
+          </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Price</Form.Label>
-          <Form.Control
-            type="number"
-            name="price"
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label className="fw-semibold">Price (₹)</Form.Label>
+            <Form.Control
+              type="number"
+              name="price"
+              onChange={handleChange}
+              placeholder="Enter price"
+              className="rounded-3"
+              required
+            />
+          </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Description</Form.Label>
-          <Form.Control
-            as="textarea"
-            name="description"
-            rows={3}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label className="fw-semibold">Description</Form.Label>
+            <Form.Control
+              as="textarea"
+              name="description"
+              rows={3}
+              onChange={handleChange}
+              placeholder="Write product details..."
+              className="rounded-3"
+              required
+            />
+          </Form.Group>
 
-        <Form.Group className="mb-3">
-          <Form.Label>Product Image</Form.Label>
-          <Form.Control
-            type="file"
-            name="image"
-            accept="image/*"
-            onChange={handleImageChange}
-            required
-          />
-        </Form.Group>
+          <Form.Group className="mb-4">
+            <Form.Label className="fw-semibold">Product Image</Form.Label>
+            <Form.Control
+              type="file"
+              name="image"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="rounded-3"
+              required
+            />
+          </Form.Group>
 
-        <Button variant="primary" type="submit" className="w-100">
-          Add Product
-        </Button>
-      </Form>
+          <Button
+            variant="primary"
+            type="submit"
+            className="w-100 rounded-pill py-2 fw-bold"
+          >
+            🚀 Upload Product
+          </Button>
+        </Form>
+      </Card>
     </Container>
   );
 };

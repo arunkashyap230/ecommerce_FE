@@ -19,8 +19,8 @@ const Login = () => {
     setError("");
 
     const loginEndpoints = [
-      "http://localhost:5000/api/auth/login", // Admin/User
-      "http://localhost:5000/api/customers/login", // Customer
+      `${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, // Admin/User
+      `${process.env.REACT_APP_BACKEND_URL}/api/customers/login`, // Customer
     ];
 
     for (const endpoint of loginEndpoints) {

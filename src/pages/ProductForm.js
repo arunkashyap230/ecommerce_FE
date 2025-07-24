@@ -27,10 +27,13 @@ const ProductForm = () => {
     formData.append("image", image);
 
     try {
-      const res = await fetch("http://localhost:5000/api/products", {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch(
+        `${process.env.REACT_APP_BACKEND_URL}/api/products`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
       const data = await res.json();
       if (res.ok) {

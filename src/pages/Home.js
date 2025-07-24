@@ -6,9 +6,10 @@ import "./Home.css"; // custom styles
 const Home = () => {
   const [products, setProducts] = useState([]);
   const { cart, addToCart, removeFromCart } = useCart();
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/products")
+    fetch(`${backendUrl}/api/products`)
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.error("Error fetching products:", err));

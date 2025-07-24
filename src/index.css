@@ -16,3 +16,23 @@ code {
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   transition: all 0.3s ease-in-out;
 }
+
+/* src/index.css or src/App.css */
+.navbar-brand {
+  color: #0d6efd !important;
+}
+
+.navbar-light .nav-link {
+  font-weight: 500;
+  font-size: 1rem;
+  transition: color 0.3s ease;
+}
+
+.navbar-light .nav-link:hover {
+  color: #0d6efd;
+}
+
+.offcanvas-title {
+  font-weight: bold;
+  color: #0d6efd;
+}

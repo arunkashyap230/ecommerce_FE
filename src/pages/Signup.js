@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom"; // 👈
 const Signup = () => {
   const navigate = useNavigate(); // 👈
   const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -14,7 +15,7 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:5000/api/auth/signup", {
+      const res = await fetch(`${backendUrl}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

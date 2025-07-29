@@ -15,19 +15,10 @@ const Home = () => {
   useEffect(() => {
     AOS.init({ duration: 1000 });
 
-    fetch(`${BACKEND_URL}/api/products/upload`)
+    fetch(`${BACKEND_URL}/api/products`)
       .then((res) => res.json())
       .then((data) => {
-        // If your API returns: { product: [...] }
-        if (Array.isArray(data)) {
-          setProducts(data);
-        } else if (Array.isArray(data.products)) {
-          setProducts(data.products);
-        } else if (data.product) {
-          setProducts([data.product]); // if it's a single product
-        } else {
-          console.error("Unexpected API response:", data);
-        }
+        setProducts(data.products || []); // Adjust based on your actual backend response
       })
       .catch((err) => console.error("Error fetching products:", err));
   }, []);

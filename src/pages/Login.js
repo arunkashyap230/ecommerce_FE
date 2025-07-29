@@ -1,14 +1,21 @@
-// src/pages/Login.js
 import React, { useState } from "react";
-import { Form, Button, Container, Alert } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import {
+  Container,
+  Form,
+  Button,
+  Alert,
+  Row,
+  Col,
+  Card,
+} from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth(); // from AuthContext
+  const { login } = useAuth();
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -19,8 +26,8 @@ const Login = () => {
     setError("");
 
     const loginEndpoints = [
-      `${process.env.REACT_APP_BACKEND_URL}/api/auth/login`, // Admin/User
-      `${process.env.REACT_APP_BACKEND_URL}/api/customers/login`, // Customer
+      `${process.env.REACT_APP_BACKEND_URL}/api/auth/login`,
+      `${process.env.REACT_APP_BACKEND_URL}/api/customers/login`,
     ];
 
     for (const endpoint of loginEndpoints) {
@@ -41,7 +48,7 @@ const Login = () => {
             role: rawUser.role,
           };
 
-          login(normalizedUser, data.token); // Call context login with consistent format
+          login(normalizedUser, data.token);
           navigate("/");
           return;
         }
@@ -54,40 +61,124 @@ const Login = () => {
   };
 
   return (
-    <Container className="mt-5" style={{ maxWidth: "500px" }}>
-      <h2 className="mb-4 text-center">Login</h2>
-      {error && <Alert variant="danger">{error}</Alert>}
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "linear-gradient(to right, #e3f2fd, #ffffff)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "40px 15px",
+      }}
+    >
+      <Container>
+        <Row className="justify-content-center">
+          <Col xs={12} sm={10} md={8} lg={6} xl={5}>
+            <Card className="shadow-lg rounded-4 border-0 p-3">
+              <Card.Body>
+                <h3 className="text-center fw-bold mb-4 text-primary">
+                  Sign In
+                </h3>
 
-      <Form onSubmit={handleSubmit}>
-        <Form.Group controlId="loginEmail" className="mb-3">
-          <Form.Label>Email address</Form.Label>
-          <Form.Control
-            type="email"
-            name="email"
-            placeholder="Enter email"
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
+                {error && <Alert variant="danger">{error}</Alert>}
 
-        <Form.Group controlId="loginPassword" className="mb-3">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            name="password"
-            placeholder="Enter password"
-            value={form.password}
-            onChange={handleChange}
-            required
-          />
-        </Form.Group>
+                <Form onSubmit={handleSubmit}>
+                  <Form.Group className="mb-3" controlId="formEmail">
+                    <Form.Label>Email address</Form.Label>
+                    <Form.Control
+                      type="email"
+                      name="email"
+                      placeholder="Enter your email"
+                      value={form.email}
+                      onChange={handleChange}
+                      required
+                    />
+                  </Form.Group>
 
-        <Button variant="primary" type="submit" className="w-100">
-          Login
-        </Button>
-      </Form>
-    </Container>
+                  <Form.Group className="mb-3" controlId="formPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control
+                      type="password"
+                      name="password"
+                      placeholder="Enter your password"
+                      value={form.password}
+                      onChange={handleChange}
+                      required
+                    />
+                  </Form.Group>
+
+                  <div className="d-flex justify-content-between align-items-center mb-3">
+                    <Form.Check label="Remember me" />
+                    <Link
+                      to="#"
+                      className="small text-decoration-none text-primary"
+                    >
+                      Forgot password?
+                    </Link>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    variant="primary"
+                    className="w-100 py-2"
+                  >
+                    Login
+                  </Button>
+                </Form>
+
+                <hr className="my-4" />
+
+                <p className="text-center text-muted">Or login using</p>
+
+                <div className="d-flex justify-content-between gap-2 flex-wrap mt-3">
+                  {[
+                    {
+                      label: "Gmail",
+                      icon: "https://img.icons8.com/color/24/gmail-new.png",
+                    },
+                    {
+                      label: "Twitter",
+                      icon: "https://img.icons8.com/color/24/twitter--v1.png",
+                    },
+                  ].map(({ label, icon }) => (
+                    <Button
+                      key={label}
+                      variant="outline-secondary"
+                      className="flex-grow-1 d-flex align-items-center gap-2 py-2 justify-content-center"
+                    >
+                      <img src={icon} alt={label} />
+                      {label}
+                    </Button>
+                  ))}
+                </div>
+
+                <div className="text-center mt-4">
+                  <span className="text-muted">Don’t have an account? </span>
+                  <Link
+                    to="/signup"
+                    className="text-decoration-none text-primary fw-semibold"
+                  >
+                    Register
+                  </Link>
+                </div>
+              </Card.Body>
+            </Card>
+
+            <p className="text-center text-muted small mt-3">
+              © 2025{" "}
+              <a
+                href="https://codedthemes.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-decoration-none"
+              >
+                CodedThemes
+              </a>
+            </p>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 

@@ -2,6 +2,9 @@
 import React, { useState } from "react";
 import { Form, Button, Container, Card } from "react-bootstrap";
 
+const BACKEND_URL =
+  process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+
 const ProductForm = () => {
   const [form, setForm] = useState({
     name: "",
@@ -20,6 +23,7 @@ const ProductForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const formData = new FormData();
     formData.append("name", form.name);
     formData.append("price", form.price);
@@ -27,13 +31,10 @@ const ProductForm = () => {
     formData.append("image", image);
 
     try {
-      const res = await fetch(
-        `${process.env.REACT_APP_BACKEND_URL}/api/products`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const res = await fetch(`${BACKEND_URL}/api/products/upload`, {
+        method: "POST",
+        body: formData,
+      });
 
       const data = await res.json();
       if (res.ok) {

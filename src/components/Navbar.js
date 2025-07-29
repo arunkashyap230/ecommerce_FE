@@ -136,6 +136,9 @@ const NavigationBar = () => {
                 </Badge>
               )}
             </Nav.Link>
+            <Nav.Link as={Link} to="/products">
+              All Products
+            </Nav.Link>
           </Nav>
         </Container>
       </Navbar>
@@ -152,6 +155,9 @@ const NavigationBar = () => {
             </Nav.Link>
             <Nav.Link as={Link} to="/add-product" onClick={handleClose}>
               <FaPlus /> Add Product
+            </Nav.Link>
+            <Nav.Link as={Link} to="/products" onClick={handleClose}>
+              📦 All Products
             </Nav.Link>
             {!user ? (
               <>
@@ -177,9 +183,11 @@ const NavigationBar = () => {
             )}
             <Nav.Link as={Link} to="/cart" onClick={handleClose}>
               <FaShoppingCart /> Cart
-              <Badge bg="danger" pill className="ms-2">
-                {cart.length}
-              </Badge>
+              {cart.length > 0 && (
+                <Badge bg="danger" pill className="ms-2">
+                  {cart.length}
+                </Badge>
+              )}
             </Nav.Link>
           </Nav>
         </Offcanvas.Body>

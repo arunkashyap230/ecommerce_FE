@@ -4,6 +4,7 @@ import { useCart } from "../context/CartContext";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "./Home.css"; // custom styles
+import { Link } from "react-router-dom";
 
 const BACKEND_URL =
   process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
@@ -53,7 +54,7 @@ const Home = () => {
           Featured Products
         </h2>
         <div className="row g-4">
-          {products.map((product, index) => (
+          {products.slice(0, 4).map((product, index) => (
             <div
               className="col-sm-6 col-md-4 col-lg-3"
               key={product._id}
@@ -107,6 +108,13 @@ const Home = () => {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Browse All Button */}
+        <div className="text-center mt-4">
+          <Link to="/products" className="btn btn-outline-primary px-4 py-2">
+            Browse All Products
+          </Link>
         </div>
       </div>
 

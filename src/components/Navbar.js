@@ -19,6 +19,7 @@ import {
   FaUserPlus,
   FaSignOutAlt,
   FaBars,
+  FaBoxOpen,
 } from "react-icons/fa";
 
 const NavigationBar = () => {
@@ -29,35 +30,48 @@ const NavigationBar = () => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const navLinkStyle = {
+    display: "flex",
+    alignItems: "center",
+    gap: "6px",
+    fontWeight: "500",
+    color: "#333",
+    transition: "all 0.2s ease-in-out",
+  };
+
+  const navHover = {
+    textDecoration: "none",
+    borderRadius: "8px",
+    padding: "6px 10px",
+    transition: "0.2s",
+  };
+
   return (
     <>
       <Navbar
-        bg="light"
-        variant="light"
+        bg="white"
         expand="lg"
-        className="shadow-sm py-3 sticky-top"
+        className="shadow-sm sticky-top py-3"
+        style={{ backdropFilter: "blur(6px)", zIndex: 1030 }}
       >
-        <Container className="d-flex justify-content-between align-items-center">
+        <Container fluid className="px-4">
           {/* Brand */}
           <Navbar.Brand
             as={Link}
             to="/"
-            className="fw-bold fs-4 d-flex align-items-center gap-2"
+            className="fw-bold fs-4 text-primary d-flex align-items-center gap-2"
           >
             🛒 E-Shop
           </Navbar.Brand>
 
-          {/* Right-side icons (Mobile View) */}
+          {/* Mobile Icons */}
           <div className="d-lg-none d-flex align-items-center gap-3">
             {user && (
-              <span
-                className="fw-semibold text-muted"
-                style={{ fontSize: "0.9rem" }}
-              >
+              <span className="fw-semibold text-muted small">
                 👋 {user.name}
               </span>
             )}
-            <Link to="/cart" className="position-relative text-dark">
+            <Link to="/cart" className="text-dark position-relative">
               <FaShoppingCart size={20} />
               {cart.length > 0 && (
                 <Badge
@@ -69,126 +83,144 @@ const NavigationBar = () => {
                 </Badge>
               )}
             </Link>
-            <Button variant="light" onClick={handleShow}>
+            <Button
+              variant="outline-primary"
+              onClick={handleShow}
+              className="border-0 shadow-sm"
+              style={{ borderRadius: "8px" }}
+            >
               <FaBars />
             </Button>
           </div>
 
-          {/* Desktop View */}
-          <Nav className="ms-auto d-none d-lg-flex align-items-center gap-4">
-            <Nav.Link
-              as={Link}
-              to="/"
-              className="d-flex align-items-center gap-1"
-            >
-              <FaHome /> Home
-            </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/add-product"
-              className="d-flex align-items-center gap-1"
-            >
-              <FaPlus /> Add Product
-            </Nav.Link>
+          {/* Desktop Navigation */}
+          <Nav className="ms-auto d-none d-lg-flex align-items-center gap-3">
+            <Nav.Item>
+              <Link to="/" style={{ ...navLinkStyle, ...navHover }}>
+                <FaHome /> Home
+              </Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Link to="/add-product" style={{ ...navLinkStyle, ...navHover }}>
+                <FaPlus /> Add Product
+              </Link>
+            </Nav.Item>
+            <Nav.Item>
+              <Link to="/products" style={{ ...navLinkStyle, ...navHover }}>
+                <FaBoxOpen /> All Products
+              </Link>
+            </Nav.Item>
+
             {!user ? (
               <>
-                <Nav.Link
-                  as={Link}
-                  to="/login"
-                  className="d-flex align-items-center gap-1"
-                >
-                  <FaSignInAlt /> Login
-                </Nav.Link>
-                <Nav.Link
-                  as={Link}
-                  to="/signup"
-                  className="d-flex align-items-center gap-1"
-                >
-                  <FaUserPlus /> Signup
-                </Nav.Link>
+                <Nav.Item>
+                  <Link to="/login" style={{ ...navLinkStyle, ...navHover }}>
+                    <FaSignInAlt /> Login
+                  </Link>
+                </Nav.Item>
+                <Nav.Item>
+                  <Link to="/signup" style={{ ...navLinkStyle, ...navHover }}>
+                    <FaUserPlus /> Signup
+                  </Link>
+                </Nav.Item>
               </>
             ) : (
               <>
-                <Nav.Link disabled className="d-flex align-items-center gap-1">
+                <span className="text-muted small fw-semibold">
                   👋 Hi, {user.name}
-                </Nav.Link>
-                <Nav.Link
-                  onClick={logout}
-                  className="d-flex align-items-center gap-1"
-                >
-                  <FaSignOutAlt /> Logout
-                </Nav.Link>
+                </span>
+                <Nav.Item>
+                  <Button
+                    variant="outline-danger"
+                    size="sm"
+                    onClick={logout}
+                    style={{
+                      ...navHover,
+                      border: "none",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "6px",
+                      fontWeight: "500",
+                      backgroundColor: "#f8d7da",
+                      color: "#721c24",
+                    }}
+                  >
+                    <FaSignOutAlt /> Logout
+                  </Button>
+                </Nav.Item>
               </>
             )}
-            <Nav.Link
-              as={Link}
-              to="/cart"
-              className="position-relative d-flex align-items-center gap-1"
-            >
-              <FaShoppingCart /> Cart
-              {cart.length > 0 && (
-                <Badge
-                  bg="danger"
-                  pill
-                  className="position-absolute top-0 start-100 translate-middle"
-                >
-                  {cart.length}
-                </Badge>
-              )}
-            </Nav.Link>
-            <Nav.Link as={Link} to="/products">
-              All Products
-            </Nav.Link>
+
+            <Nav.Item>
+              <Link
+                to="/cart"
+                style={{ ...navLinkStyle, ...navHover, position: "relative" }}
+              >
+                <FaShoppingCart /> Cart
+                {cart.length > 0 && (
+                  <Badge
+                    bg="danger"
+                    pill
+                    className="position-absolute top-0 start-100 translate-middle"
+                  >
+                    {cart.length}
+                  </Badge>
+                )}
+              </Link>
+            </Nav.Item>
           </Nav>
         </Container>
       </Navbar>
 
-      {/* Offcanvas Sidebar for Mobile */}
+      {/* Mobile Offcanvas */}
       <Offcanvas show={show} onHide={handleClose} placement="end">
         <Offcanvas.Header closeButton>
-          <Offcanvas.Title>Menu</Offcanvas.Title>
+          <Offcanvas.Title>📂 Menu</Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
           <Nav className="flex-column gap-3">
-            <Nav.Link as={Link} to="/" onClick={handleClose}>
+            <Link to="/" onClick={handleClose} style={navLinkStyle}>
               <FaHome /> Home
-            </Nav.Link>
-            <Nav.Link as={Link} to="/add-product" onClick={handleClose}>
+            </Link>
+            <Link to="/add-product" onClick={handleClose} style={navLinkStyle}>
               <FaPlus /> Add Product
-            </Nav.Link>
-            <Nav.Link as={Link} to="/products" onClick={handleClose}>
-              📦 All Products
-            </Nav.Link>
+            </Link>
+            <Link to="/products" onClick={handleClose} style={navLinkStyle}>
+              <FaBoxOpen /> All Products
+            </Link>
             {!user ? (
               <>
-                <Nav.Link as={Link} to="/login" onClick={handleClose}>
+                <Link to="/login" onClick={handleClose} style={navLinkStyle}>
                   <FaSignInAlt /> Login
-                </Nav.Link>
-                <Nav.Link as={Link} to="/signup" onClick={handleClose}>
+                </Link>
+                <Link to="/signup" onClick={handleClose} style={navLinkStyle}>
                   <FaUserPlus /> Signup
-                </Nav.Link>
+                </Link>
               </>
             ) : (
               <>
-                <Nav.Link disabled>👋 Hi, {user.name}</Nav.Link>
-                <Nav.Link
+                <div className="fw-semibold mb-2">👋 {user.name}</div>
+                <Button
+                  variant="outline-danger"
                   onClick={() => {
                     logout();
                     handleClose();
                   }}
+                  size="sm"
+                  className="d-flex align-items-center gap-2"
                 >
                   <FaSignOutAlt /> Logout
-                </Nav.Link>
+                </Button>
               </>
             )}
-            <Nav.Link as={Link} to="/cart" onClick={handleClose}>
+            <Link to="/cart" onClick={handleClose} style={navLinkStyle}>
               <FaShoppingCart /> Cart
               {cart.length > 0 && (
                 <Badge bg="danger" pill className="ms-2">
                   {cart.length}
                 </Badge>
               )}
-            </Nav.Link>
+            </Link>
           </Nav>
         </Offcanvas.Body>
       </Offcanvas>

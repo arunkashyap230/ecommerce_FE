@@ -1,15 +1,20 @@
 import React, { useState } from "react";
 import { useCart } from "../context/CartContext";
+import { useNavigate } from "react-router-dom";
+import { Toast, ToastContainer } from "react-bootstrap";
 
 const Cart = () => {
   const { cart, removeFromCart, clearCart } = useCart();
   const [showBillForm, setShowBillForm] = useState(false);
+  const [showLoginToast, setShowLoginToast] = useState(false); // Toast state
   const [billData, setBillData] = useState({
     customerName: "",
     mobileNumber: "",
     email: "",
     address: "",
   });
+
+  const navigate = useNavigate();
 
   const totalAmount = cart.reduce((acc, item) => {
     const price = Number(item.price) || 0;
@@ -42,7 +47,10 @@ const Cart = () => {
         `${process.env.REACT_APP_BACKEND_URL}/api/checkout`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
           body: JSON.stringify(payload),
         }
       );
@@ -50,7 +58,7 @@ const Cart = () => {
       const result = await response.json();
       if (response.ok) {
         alert("✅ Order placed successfully!");
-        clearCart(); // If you have a function to clear the cart
+        clearCart();
         setShowBillForm(false);
       } else {
         alert(`❌ Error: ${result.message}`);
@@ -61,9 +69,41 @@ const Cart = () => {
     }
   };
 
+  const handleProceedToCheckout = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setShowLoginToast(true); // show toast
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000); // delay before redirect
+    } else {
+      setShowBillForm(true);
+    }
+  };
+
   return (
     <div className="container py-5">
       <h2 className="text-center mb-5 fw-bold">🛒 Your Shopping Cart</h2>
+
+      {/* Toast for login alert */}
+      <ToastContainer position="top-end" className="p-3">
+        <Toast
+          bg="warning"
+          onClose={() => setShowLoginToast(false)}
+          show={showLoginToast}
+          delay={1800}
+          autohide
+        >
+          <Toast.Header>
+            <strong className="me-auto text-dark">Login Required</strong>
+          </Toast.Header>
+          <Toast.Body className="text-dark">
+            Please log in to proceed to checkout.
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
+
+      {/* Cart content... (keep your existing table, billing form etc.) */}
 
       {cart.length === 0 ? (
         <div className="text-center">
@@ -124,7 +164,7 @@ const Cart = () => {
             </h4>
             <button
               className="btn btn-success mt-2"
-              onClick={() => setShowBillForm(true)}
+              onClick={handleProceedToCheckout}
             >
               Proceed to Checkout
             </button>
@@ -132,7 +172,7 @@ const Cart = () => {
         </>
       )}
 
-      {/* BILLING FORM */}
+      {/* Existing Billing Form — keep as is */}
       {showBillForm && (
         <div className="mt-5 p-4 bg-white rounded shadow">
           <h4 className="mb-4 text-primary">🧾 Billing Details</h4>
@@ -149,7 +189,6 @@ const Cart = () => {
                   onChange={handleChange}
                 />
               </div>
-
               <div className="col-md-6">
                 <label className="form-label">Mobile Number</label>
                 <input
@@ -162,7 +201,6 @@ const Cart = () => {
                   pattern="[0-9]{10}"
                 />
               </div>
-
               <div className="col-md-6">
                 <label className="form-label">Email Address</label>
                 <input
@@ -174,7 +212,6 @@ const Cart = () => {
                   onChange={handleChange}
                 />
               </div>
-
               <div className="col-md-6">
                 <label className="form-label">Shipping Address</label>
                 <input
@@ -187,7 +224,6 @@ const Cart = () => {
                 />
               </div>
             </div>
-
             <div className="mt-4 text-end">
               <button type="submit" className="btn btn-primary">
                 Submit Bill & Place Order

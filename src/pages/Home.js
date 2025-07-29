@@ -5,15 +5,30 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import "./Home.css"; // custom styles
 
+const BACKEND_URL =
+  process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+
 const Home = () => {
   const [products, setProducts] = useState([]);
   const { cart, addToCart, removeFromCart } = useCart();
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
-    fetch(`${process.env.REACT_APP_BACKEND_URL}/api/products`)
+
+    fetch(`${BACKEND_URL}/api/products/upload`)
       .then((res) => res.json())
-      .then((data) => setProducts(data))
+      .then((data) => {
+        // If your API returns: { product: [...] }
+        if (Array.isArray(data)) {
+          setProducts(data);
+        } else if (Array.isArray(data.products)) {
+          setProducts(data.products);
+        } else if (data.product) {
+          setProducts([data.product]); // if it's a single product
+        } else {
+          console.error("Unexpected API response:", data);
+        }
+      })
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
@@ -40,46 +55,6 @@ const Home = () => {
           </a>
         </div>
       </div>
-
-      {/* Categories Section */}
-      <section className="py-5 bg-light" id="categories">
-        <div className="container text-center">
-          <h2 className="fw-bold mb-4" data-aos="fade-up">
-            Shop by Category
-          </h2>
-          <div className="row g-4 justify-content-center">
-            {[
-              { name: "Electronics", icon: "💻" },
-              { name: "Fashion", icon: "👗" },
-              { name: "Home", icon: "🏠" },
-              { name: "Toys", icon: "🧸" },
-            ].map((cat, i) => (
-              <div
-                className="col-6 col-md-3"
-                key={i}
-                data-aos="fade-up"
-                data-aos-delay={i * 100}
-              >
-                <div className="category-card py-4 shadow-sm">
-                  <div className="display-5">{cat.icon}</div>
-                  <h5 className="mt-2 fw-semibold">{cat.name}</h5>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="py-5 bg-dark text-white text-center">
-        <div className="container" data-aos="zoom-in">
-          <h3 className="fw-bold">Limited Time Deals!</h3>
-          <p>Hurry up and grab exclusive discounts before they expire.</p>
-          <a href="#products" className="btn btn-warning btn-lg">
-            Explore Offers
-          </a>
-        </div>
-      </section>
 
       {/* Products Section */}
       <div className="container py-5" id="products">
@@ -143,6 +118,46 @@ const Home = () => {
           ))}
         </div>
       </div>
+
+      {/* Categories Section */}
+      <section className="py-5 bg-light" id="categories">
+        <div className="container text-center">
+          <h2 className="fw-bold mb-4" data-aos="fade-up">
+            Shop by Category
+          </h2>
+          <div className="row g-4 justify-content-center">
+            {[
+              { name: "Electronics", icon: "💻" },
+              { name: "Fashion", icon: "👗" },
+              { name: "Home", icon: "🏠" },
+              { name: "Toys", icon: "🧸" },
+            ].map((cat, i) => (
+              <div
+                className="col-6 col-md-3"
+                key={i}
+                data-aos="fade-up"
+                data-aos-delay={i * 100}
+              >
+                <div className="category-card py-4 shadow-sm">
+                  <div className="display-5">{cat.icon}</div>
+                  <h5 className="mt-2 fw-semibold">{cat.name}</h5>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-5 bg-dark text-white text-center">
+        <div className="container" data-aos="zoom-in">
+          <h3 className="fw-bold">Limited Time Deals!</h3>
+          <p>Hurry up and grab exclusive discounts before they expire.</p>
+          <a href="#products" className="btn btn-warning btn-lg">
+            Explore Offers
+          </a>
+        </div>
+      </section>
     </>
   );
 };

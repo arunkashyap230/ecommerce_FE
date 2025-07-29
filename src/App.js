@@ -9,6 +9,7 @@ import Signup from "./pages/Signup";
 import ProductForm from "./pages/ProductForm";
 import CustomerSignup from "./pages/CustomerSignup";
 import { AuthProvider } from "./context/AuthContext";
+import AllProducts from "./pages/AllProducts";
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/add-product" element={<ProductForm />} />
+          <Route path="/products" element={<AllProducts />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/customer-signup" element={<CustomerSignup />} />
